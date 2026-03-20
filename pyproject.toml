@@ -1,0 +1,24 @@
+[build-system]
+requires      = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
+
+[project]
+name            = "pyfreeze-rs"
+version         = "0.1.0"
+description     = "Dormant Process Resumption for Python — CPython import-phase snapshots"
+readme          = "README.md"
+license         = { text = "MIT" }
+requires-python = ">=3.10"
+keywords        = ["startup", "performance", "snapshot", "django", "flask"]
+
+[project.scripts]
+pyfreeze = "pyfreeze._cli:main"
+
+[tool.maturin]
+# Build the Rust extension and install the Python package together.
+python-source   = "python"
+module-name     = "pyfreeze_rs"
+features        = ["pyo3/extension-module"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
