@@ -1,0 +1,156 @@
+# Runs the Flask and Django services side by side with:
+#   - Separate snapshot volumes per service (snapshots survive container restarts)
+#   - A shared Postgres database (both apps can point to it)
+#   - A Redis service (useful for Django cache / Celery / Flask-Session)
+#
+# Quick start:
+#   docker compose up --build
+#
+# Force snapshot rebuild for one service:
+#   docker compose run --rm flask  pyfreeze invalidate /snapshots/flask.pyfreeze
+#   docker compose run --rm django pyfreeze invalidate /snapshots/django-wsgi.pyfreeze
+#
+# Run a Django management command:
+#   docker compose run --rm django manage migrate
+#   docker compose run --rm django manage createsuperuser
+
+services:
+
+  # ── Flask ────────────────────────────────────────────────────────────────────
+  flask:
+    build:
+      context: .
+      dockerfile: docker/flask/Dockerfile
+      target: runtime
+    image: myapp-flask:latest
+    container_name: myapp_flask
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV:             production
+      FLASK_APP:             app:create_app
+      PYFREEZE_SNAPSHOT:     /snapshots/flask.pyfreeze
+      PYFREEZE_FRAMEWORK:    flask
+      PYFREEZE_LOG:          info
+      DATABASE_URL:          postgresql://appuser:apppassword@postgres:5432/appdb
+      REDIS_URL:             redis://redis:6379/0
+      SECRET_KEY:            ${FLASK_SECRET_KEY:-changeme-in-production}
+    volumes:
+      # Named volume — snapshots survive `docker compose down` and restarts.
+      # Remove the volume explicitly to force a full rebuild:
+      #   docker volume rm pyfreeze-rs_flask_snapshots
+      - flask_snapshots:/snapshots
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python3", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 30s
+      timeout:  5s
+      retries:  3
+      start_period: 20s
+    networks:
+      - app_network
+
+  # ── Django ───────────────────────────────────────────────────────────────────
+  django:
+    build:
+      context: .
+      dockerfile: docker/django/Dockerfile
+      target: runtime
+    image: myapp-django:latest
+    container_name: myapp_django
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: myproject.settings.production
+      PYFREEZE_FRAMEWORK:     django
+      PYFREEZE_LOG:           info
+      DATABASE_URL:           postgresql://appuser:apppassword@postgres:5432/appdb
+      REDIS_URL:              redis://redis:6379/1
+      SECRET_KEY:             ${DJANGO_SECRET_KEY:-changeme-in-production}
+      ALLOWED_HOSTS:          "*"
+      SKIP_COLLECTSTATIC:     "0"
+    volumes:
+      - django_snapshots:/snapshots
+      - django_static:/app/staticfiles
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "python3", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')"]
+      interval: 30s
+      timeout:  5s
+      retries:  3
+      start_period: 25s
+    networks:
+      - app_network
+
+  # ── Postgres ─────────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: myapp_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     appuser
+      POSTGRES_PASSWORD: apppassword
+      POSTGRES_DB:       appdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 10s
+      timeout:  5s
+      retries:  5
+    networks:
+      - app_network
+
+  # ── Redis ─────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: myapp_redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_network
+
+# ── Volumes ───────────────────────────────────────────────────────────────────
+# Each service gets its own isolated snapshot volume.
+# Snapshots are framework-specific, so they must NEVER be shared between
+# the Flask and Django containers.
+volumes:
+  flask_snapshots:
+    name: pyfreeze_flask_snapshots
+    # driver: local                     # default
+    # To use a host path instead (e.g. for easy inspection):
+    # driver_opts:
+    #   type: none
+    #   o: bind
+    #   device: ./snapshots/flask
+
+  django_snapshots:
+    name: pyfreeze_django_snapshots
+
+  django_static:
+    name: myapp_django_static
+
+  postgres_data:
+    name: myapp_postgres_data
+
+  redis_data:
+    name: myapp_redis_data
+
+# ── Networks ──────────────────────────────────────────────────────────────────
+networks:
+  app_network:
+    driver: bridge

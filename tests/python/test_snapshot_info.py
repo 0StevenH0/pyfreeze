@@ -1,5 +1,3 @@
-# tests/python/test_snapshot_info.py
-#
 # Tests for the pure-Python sidecar reader.
 # These run without the Rust extension — pytest tests/python/
 

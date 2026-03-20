@@ -1,5 +1,3 @@
-# tests/python/test_api.py
-#
 # Tests for the public pyfreeze Python API.
 # These exercise the pure-Python paths (no Rust extension required).
 

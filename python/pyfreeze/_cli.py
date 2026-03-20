@@ -1,5 +1,3 @@
-# python/pyfreeze/_cli.py
-#
 # Pure-Python CLI entry point installed via pyproject.toml `[project.scripts]`.
 # This delegates to the compiled `pyfreeze` Rust binary when it exists,
 # and falls back to a helpful error message when it doesn't.

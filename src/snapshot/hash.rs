@@ -1,5 +1,3 @@
-// src/snapshot/hash.rs
-//
 // Computes a deterministic hash over the set of Python source files that were
 // imported during the capture phase.  If ANY of those files change on disk,
 // the hash changes → the snapshot is declared stale and is rebuilt.

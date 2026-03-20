@@ -1,5 +1,3 @@
-# tests/python/test_plugins.py
-#
 # Tests for the plugin registry — runs without the Rust extension.
 
 import sys

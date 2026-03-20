@@ -1,5 +1,3 @@
-// src/snapshot/mod.rs
-//
 // High-level API for reading and writing snapshot files.
 // Lower-level details live in format.rs, hash.rs, and metadata.rs.
 

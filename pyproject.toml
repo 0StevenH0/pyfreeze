@@ -15,7 +15,6 @@ keywords        = ["startup", "performance", "snapshot", "django", "flask"]
 pyfreeze = "pyfreeze._cli:main"
 
 [tool.maturin]
-# Build the Rust extension and install the Python package together.
 python-source   = "python"
 module-name     = "pyfreeze_rs"
 features        = ["pyo3/extension-module"]

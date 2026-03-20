@@ -1,5 +1,3 @@
-// src/capture/graph_walker.rs
-//
 // Walks the CPython `sys.modules` dict and serializes each module's `__dict__`
 // using Python's own `pickle` machinery (called through PyO3).
 //

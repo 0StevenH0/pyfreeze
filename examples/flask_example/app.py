@@ -1,5 +1,3 @@
-# examples/flask_example/app.py
-#
 # Standard Flask application factory pattern with PyFreeze baked in.
 # The only additions are the lines marked ← PyFreeze.
 

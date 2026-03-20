@@ -1,5 +1,3 @@
-// src/snapshot/metadata.rs
-//
 // Builds and validates the `SnapshotMetadata` struct.
 // Also handles the JSON sidecar file (`<snapshot>.meta.json`) which lets
 // human operators inspect a snapshot without parsing the binary blob.

@@ -1,5 +1,3 @@
-# python/pyfreeze/flask_plugin.py
-#
 # Drop-in Flask integration.
 #
 # Usage — factory pattern (recommended):

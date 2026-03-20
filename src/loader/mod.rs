@@ -1,5 +1,3 @@
-// src/loader/mod.rs
-//
 // Restores a snapshot into a fresh Python interpreter.
 //
 // Restoration sequence:

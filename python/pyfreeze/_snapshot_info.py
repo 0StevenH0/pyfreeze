@@ -1,5 +1,3 @@
-# python/pyfreeze/_snapshot_info.py
-#
 # Pure-Python helper that reads the JSON sidecar file written alongside every
 # snapshot.  The sidecar lives at `<snapshot>.meta.json` and contains all
 # SnapshotMetadata fields in human-readable form.

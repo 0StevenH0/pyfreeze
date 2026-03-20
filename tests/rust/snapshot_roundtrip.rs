@@ -1,5 +1,3 @@
-// tests/rust/snapshot_roundtrip.rs
-//
 // Integration tests for the snapshot write → read round-trip.
 // Run with: cargo test
 

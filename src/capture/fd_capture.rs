@@ -1,5 +1,3 @@
-// src/capture/fd_capture.rs
-//
 // Discovers and classifies all open file descriptors held by the current
 // Python process at snapshot time.
 //

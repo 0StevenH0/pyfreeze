@@ -1,5 +1,3 @@
-# python/pyfreeze/plugins.py
-#
 # Plugin registry for libraries that need custom capture/restore logic.
 #
 # A plugin is any object that implements the Protocol below.  Plugins are

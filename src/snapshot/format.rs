@@ -1,5 +1,3 @@
-// src/snapshot/format.rs
-//
 // On-disk layout of a PyFreeze snapshot.
 //
 // ┌───────────────────────────────────────────────────────────┐

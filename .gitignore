@@ -1,0 +1,85 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# PyFreeze-RS  —  .gitignore
+# ──────────────────────────────────────────────────────────────────────────────
+
+# ── PyFreeze snapshot files ───────────────────────────────────────────────────
+# Snapshots are binary blobs that can be hundreds of MB (they contain serialised
+# CPython heap state).  They are machine- and Python-version-specific, so they
+# should NEVER be committed.
+#
+# Default paths (from src/snapshot/mod.rs default_cache_dir()):
+#   Linux/macOS : ~/.cache/pyfreeze/
+#   Windows     : %LOCALAPPDATA%\pyfreeze\
+#
+# Container path (from docker-compose.yml PYFREEZE_SNAPSHOT):
+#   /snapshots/*.pyfreeze
+#
+# If you store snapshots alongside your project (e.g. ./snapshots/), add this:
+snapshots/
+*.pyfreeze
+*.pyfreeze.tmp          # atomic write temp file
+*.pyfreeze.meta.json    # human-readable sidecar — also machine-specific, skip it
+
+# ── Rust build output ─────────────────────────────────────────────────────────
+/target/
+/dist/                  # maturin wheel output
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so                    # compiled C extensions (including pyfreeze_rs.so)
+*.pyd                   # Windows compiled extensions
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+dist/
+build/
+wheels/
+pip-wheel-metadata/
+*.whl
+
+# Pytest
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Mypy / pyright
+.mypy_cache/
+.pyright/
+pyrightconfig.json
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Editor / OS ──────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example           # keep the example template
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+*.log
+logs/

@@ -1,5 +1,3 @@
-// src/main.rs
-//
 // `pyfreeze` CLI  —  the drop-in replacement for the `python` command.
 //
 // Usage:

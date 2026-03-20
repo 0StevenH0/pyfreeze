@@ -1,5 +1,3 @@
-// src/error.rs
-//
 // Unified error type for PyFreeze-RS.
 // Every module returns `Result<T, FreezeError>`.
 

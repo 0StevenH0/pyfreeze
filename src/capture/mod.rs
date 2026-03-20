@@ -1,5 +1,3 @@
-// src/capture/mod.rs
-//
 // Orchestrates the full capture sequence:
 //   1. Record the start time.
 //   2. Walk sys.modules (graph_walker).

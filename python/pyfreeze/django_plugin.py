@@ -1,5 +1,3 @@
-# python/pyfreeze/django_plugin.py
-#
 # Drop-in Django integration.
 #
 # Option A — manage.py (development):

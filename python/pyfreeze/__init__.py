@@ -1,5 +1,3 @@
-# python/pyfreeze/__init__.py
-#
 # PyFreeze public Python API.
 #
 # Two usage patterns:

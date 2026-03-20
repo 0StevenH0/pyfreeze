@@ -1,5 +1,3 @@
-// src/lib.rs
-//
 // PyO3 extension module entry point.
 // Exposes `pyfreeze_rs` as an importable Python extension.
 //

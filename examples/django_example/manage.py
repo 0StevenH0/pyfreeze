@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# examples/django_example/manage.py
 #
 # Drop-in replacement for the standard Django manage.py.
 # The only addition is the two lines marked ← PyFreeze.
